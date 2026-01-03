@@ -5,34 +5,53 @@ import random
 import os
 
 # 配置
-# 抓取数量：为了演示，默认抓取前 20 个。实际使用时可以改为 1000。
-TARGET_COUNT = 20 
-OUTPUT_FILE = "steam_games_data.json"
+TARGET_COUNT = 1000 
+OUTPUT_FILE = "assets/json/steam_games_data.json" # 直接写入 assets
+BATCH_SIZE = 50
 
-# Steam 接口参数
-# cc=cn: 中国区价格/货币
-# l=schinese: 简体中文
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
 }
 
-def get_top_sellers_ids(count=100):
-    """
-    获取热销榜的 App ID 列表
-    """
+# 我们的客户端标准分类映射
+CATEGORY_MAPPING = {
+    "RPG": ["角色扮演", "RPG", "JRPG", "ARPG", "剧情丰富"],
+    "FPS/TPS": ["射击", "FPS", "第一人称射击", "第三人称射击", "狙击"],
+    "动作冒险": ["动作", "冒险", "开放世界", "类魂", "砍杀"],
+    "竞速狂飙": ["竞速", "驾驶", "赛车", "体育", "模拟"],
+    "独立佳作": ["独立", "像素", "2D", "横向卷轴", "解谜"],
+    "策略模拟": ["策略", "模拟", "建造", "回合制", "卡牌"]
+}
+
+def determine_category(tags, name):
+    """根据 Steam 标签归纳为我们的主分类"""
+    # 1. 优先匹配硬核类型
+    for tag in tags:
+        for main_cat, keywords in CATEGORY_MAPPING.items():
+            if tag in keywords:
+                return main_cat
+    # 2. 默认分类
+    return "热门精选"
+
+def get_top_sellers_ids(count=1000):
     print(f"正在获取 Steam 热销榜前 {count} 名...")
     app_ids = []
     base_url = "https://store.steampowered.com/search/results/"
     
-    # Steam 搜索每页默认 50 个，需要分页
-    pages = (count // 50) + 1
+    # Steam 每次最多给 100，但建议 50 比较稳
+    batch_size = 50
+    pages = (count // batch_size) + 2
     
     for page in range(pages):
+        if len(app_ids) >= count:
+            break
+            
         try:
+            print(f"  正在获取第 {page+1} 页索引...")
             params = {
                 "query": "",
-                "start": page * 50,
-                "count": 50,
+                "start": page * batch_size,
+                "count": batch_size,
                 "dynamic_data": "",
                 "sort_by": "_ASC",
                 "snr": "1_7_7_7000_7",
@@ -42,44 +61,36 @@ def get_top_sellers_ids(count=100):
                 "l": "schinese"
             }
             
-            response = requests.get(base_url, params=params, headers=HEADERS, timeout=10)
+            response = requests.get(base_url, params=params, headers=HEADERS, timeout=15)
             if response.status_code == 200:
                 data = response.json()
-                # 解析 HTML (简单方式，或者使用 BeautifulSoup)
-                # 这里 Steam 返回的 json 中包含 html 片段，我们简单提取 appid
                 results_html = data.get("results_html", "")
                 
-                # 简单的字符串处理提取 data-ds-appid="12345"
                 import re
                 ids = re.findall(r'data-ds-appid="(\d+)"', results_html)
                 
-                # 去重并添加
+                new_ids = 0
                 for app_id in ids:
                     if app_id not in app_ids:
                         app_ids.append(app_id)
-                        
-                print(f"  - 已获取 {len(app_ids)} 个 ID")
-                if len(app_ids) >= count:
-                    break
+                        new_ids += 1
+                
+                print(f"    -> 本页新增 {new_ids} 个, 总计 {len(app_ids)}")
+                
+                if new_ids == 0:
+                    print("    -> 警告：本页无新数据，可能已达上限")
             
-            # 礼貌爬虫，暂停一下
-            time.sleep(1)
+            time.sleep(random.uniform(1.5, 3.0))
             
         except Exception as e:
-            print(f"获取列表失败: {e}")
+            print(f"获取列表页失败: {e}")
+            time.sleep(5) # 出错多歇会儿
             
     return app_ids[:count]
 
 def get_game_details(app_id):
-    """
-    根据 App ID 获取详细信息（图片、视频、简介）
-    """
     url = "https://store.steampowered.com/api/appdetails"
-    params = {
-        "appids": app_id,
-        "cc": "cn",
-        "l": "schinese"
-    }
+    params = {"appids": app_id, "cc": "cn", "l": "schinese"}
     
     try:
         response = requests.get(url, params=params, headers=HEADERS, timeout=10)
@@ -88,31 +99,41 @@ def get_game_details(app_id):
         if data and str(app_id) in data and data[str(app_id)]["success"]:
             game_data = data[str(app_id)]["data"]
             
-            # 提取我们需要的数据
-            
-            # 1. 视频 (取第一个宣传片的 mp4)
+            # 必须要有图和名字
+            if "header_image" not in game_data or "name" not in game_data:
+                return None
+
+            # 视频
             video_url = ""
             if "movies" in game_data and len(game_data["movies"]) > 0:
-                # 优先取 480p 或 max 避免流量过大，实际可用 max
                 video_url = game_data["movies"][0].get("mp4", {}).get("480", "")
             
-            # 2. 标签/分类 (Steam API 的 categories 或 genres)
+            # 标签
             tags = []
             if "genres" in game_data:
-                tags = [g["description"] for g in game_data["genres"]][:3] # 只取前3个
-                
-            # 3. 清洗数据结构
+                tags = [g["description"] for g in game_data["genres"]] # 取全部
+            
+            # 价格
+            price_text = "免费"
+            if "price_overview" in game_data:
+                price_text = game_data["price_overview"].get("final_formatted", "免费")
+            elif game_data.get("is_free", False):
+                price_text = "免费"
+
+            # 归类
+            my_category = determine_category(tags, game_data["name"])
+
             clean_data = {
                 "id": game_data["steam_appid"],
                 "name": game_data["name"],
-                "short_description": game_data["short_description"],
-                "header_image": game_data["header_image"], # 横图
-                # 尝试构造竖图封面 (library_600x900)，官方 API 不一定直接给，但 URL 规律通常如下
+                "short_description": game_data.get("short_description", ""),
+                "header_image": game_data["header_image"],
                 "poster_image": f"https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/{app_id}/library_600x900.jpg",
                 "video_url": video_url,
-                "tags": tags,
-                "price_text": game_data.get("price_overview", {}).get("final_formatted", "免费"),
-                "release_date": game_data.get("release_date", {}).get("date", "")
+                "tags": tags[:4], # 只存前4个展示用
+                "price_text": price_text,
+                "release_date": game_data.get("release_date", {}).get("date", ""),
+                "category": my_category # 直接存好分类
             }
             return clean_data
             
@@ -122,34 +143,37 @@ def get_game_details(app_id):
     return None
 
 def main():
-    # 1. 获取 ID 列表
+    # 0. 检查已有数据，支持增量更新（暂略，直接覆盖）
+    
+    # 1. 获取 ID
     app_ids = get_top_sellers_ids(TARGET_COUNT)
-    print(f"最终待抓取列表: {app_ids}")
+    print(f"准备抓取 {len(app_ids)} 个游戏详情...")
     
     final_games = []
     
-    # 2. 遍历获取详情
-    print("开始抓取详情...")
+    # 2. 遍历
     for index, app_id in enumerate(app_ids):
-        print(f"[{index+1}/{len(app_ids)}] 正在处理 AppID: {app_id}")
-        
+        # 简单进度条
+        if index % 10 == 0:
+            print(f"进度: {index}/{len(app_ids)} (已成功: {len(final_games)})")
+            
         details = get_game_details(app_id)
         if details:
             final_games.append(details)
-            print(f"  -> 成功: {details['name']}")
-        else:
-            print(f"  -> 失败或跳过")
-            
-        # 防止触发 Steam 速率限制 (Rate Limit)
-        # 商业项目建议使用代理池
-        time.sleep(random.uniform(1.0, 2.0))
         
-    # 3. 保存结果
+        # 3. 定期保存 (防止中间崩溃全白跑)
+        if len(final_games) > 0 and len(final_games) % 50 == 0:
+            print(f"  -> 自动保存 {len(final_games)} 条数据...")
+            with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
+                json.dump(final_games, f, ensure_ascii=False, indent=2)
+
+        time.sleep(random.uniform(0.5, 1.2)) # 稍微快一点，1000个要跑很久
+        
+    # 最终保存
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         json.dump(final_games, f, ensure_ascii=False, indent=2)
         
-    print(f"\n抓取完成！数据已保存至 {OUTPUT_FILE}")
-    print(f"共获取 {len(final_games)} 个游戏信息。")
+    print(f"全部完成！共 {len(final_games)} 条数据已存入 {OUTPUT_FILE}")
 
 if __name__ == "__main__":
     main()
