@@ -14,6 +14,17 @@ class GameDetailScreen extends StatefulWidget {
 }
 
 class _GameDetailScreenState extends State<GameDetailScreen> {
+  // 定义一组浅色荧光色板 (Cyberpunk Light)
+  final List<Color> _neonColors = const [
+    Color(0xFF00FFCC), // 荧光青
+    Color(0xFFFF66CC), // 荧光粉
+    Color(0xFFCCFF00), // 荧光柠
+    Color(0xFF00FFFF), // 电光蓝
+    Color(0xFFFF9966), // 珊瑚橙
+    Color(0xFFCC99FF), // 薰衣草
+    Color(0xFF66FF99), // 薄荷绿
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,12 +50,14 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                 children: [
                   Text(widget.game.name, style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 12),
-                  // 彩色实心小方框标签
+                  
+                  // 彩色荧光标签
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
-                    children: widget.game.tags.map((tag) => _buildColoredTag(tag)).toList(),
+                    children: widget.game.tags.map((tag) => _buildNeonTag(tag)).toList(),
                   ),
+                  
                   const SizedBox(height: 24),
                   const Text("游戏简介", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 8),
@@ -68,29 +81,30 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
     );
   }
 
-  Widget _buildColoredTag(String text) {
-    // 生成高饱和度的实心颜色
-    final color = Colors.primaries[text.hashCode % Colors.primaries.length];
+  Widget _buildNeonTag(String text) {
+    // 固定的颜色映射，保证同一个标签颜色一致
+    final color = _neonColors[text.hashCode.abs() % _neonColors.length];
     
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5), // 紧凑
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: color, // 实心背景
-        borderRadius: BorderRadius.circular(4), // 小圆角方框
+        color: color, // 浅色荧光背景
+        borderRadius: BorderRadius.circular(4),
         boxShadow: [
+          // 加上一点同色系的辉光，增加赛博感
           BoxShadow(
-            color: color.withOpacity(0.4),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
+            color: color.withOpacity(0.6),
+            blurRadius: 8,
+            offset: const Offset(0, 0),
           ),
         ],
       ),
       child: Text(
         text,
         style: const TextStyle(
-          color: Colors.white, // 白色文字
+          color: Colors.black, // 黑色文字，对比度极高
           fontSize: 12,
-          fontWeight: FontWeight.bold, // 粗体
+          fontWeight: FontWeight.w900, // 极粗体，更有潮酷感
           letterSpacing: 0.5,
         ),
       ),
@@ -104,7 +118,6 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
       child: SafeArea(
         child: Row(
           children: [
-            // 左边：个人磁盘
             Expanded(
               flex: 1,
               child: OutlinedButton.icon(
@@ -122,7 +135,6 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
               ),
             ),
             const SizedBox(width: 16),
-            // 右边：启动游戏
             Expanded(
               flex: 2,
               child: ElevatedButton(

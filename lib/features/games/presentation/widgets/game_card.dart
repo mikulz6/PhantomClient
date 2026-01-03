@@ -7,6 +7,17 @@ class GameCard extends StatelessWidget {
   final String imageUrl;
   final List<String> tags;
 
+  // 同样的浅色荧光色板
+  static const List<Color> _neonColors = [
+    Color(0xFF00FFCC), // 荧光青
+    Color(0xFFFF66CC), // 荧光粉
+    Color(0xFFCCFF00), // 荧光柠
+    Color(0xFF00FFFF), // 电光蓝
+    Color(0xFFFF9966), // 珊瑚橙
+    Color(0xFFCC99FF), // 薰衣草
+    Color(0xFF66FF99), // 薄荷绿
+  ];
+
   const GameCard({
     super.key,
     required this.title,
@@ -84,7 +95,7 @@ class GameCard extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                    fontSize: 14, // 略微调小一点
+                    fontSize: 14, 
                     fontWeight: FontWeight.bold,
                     color: AppColors.textPrimary,
                   ),
@@ -94,7 +105,7 @@ class GameCard extends StatelessWidget {
                 Wrap(
                   spacing: 4,
                   runSpacing: 4,
-                  children: tags.map((tag) => _buildTag(tag)).toList(),
+                  children: tags.map((tag) => _buildNeonTag(tag)).toList(),
                 ),
               ],
             ),
@@ -104,9 +115,8 @@ class GameCard extends StatelessWidget {
     );
   }
 
-  Widget _buildTag(String text) {
-    // 列表卡片用稍微暗一点的纯色，或者也用高亮色
-    final color = Colors.primaries[text.hashCode % Colors.primaries.length];
+  Widget _buildNeonTag(String text) {
+    final color = _neonColors[text.hashCode.abs() % _neonColors.length];
     
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
@@ -118,7 +128,7 @@ class GameCard extends StatelessWidget {
         text,
         style: const TextStyle(
           fontSize: 9,
-          color: Colors.white,
+          color: Colors.black, // 黑色文字
           fontWeight: FontWeight.bold,
         ),
       ),
