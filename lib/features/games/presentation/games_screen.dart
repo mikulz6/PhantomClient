@@ -20,25 +20,24 @@ class GamesScreen extends ConsumerWidget {
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, stack) => Center(child: Text('Error: $err')),
         data: (games) {
-          final topSellers = games.take(10).toList(); // 假定前10是热销
+          final topSellers = games.take(10).toList();
 
           return CustomScrollView(
             slivers: [
               SliverAppBar(
                 floating: true,
                 pinned: true,
-                backgroundColor: AppColors.background.withOpacity(0.95),
-                title: const Text("CloudGaming", style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 1)),
+                backgroundColor: AppColors.background.withOpacity(0.95), // 浅色磨砂
+                // 标题改为黑色
+                title: const Text("CloudGaming", style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 1, color: AppColors.textPrimary)),
                 actions: [
-                  IconButton(icon: const Icon(Icons.search), onPressed: () {}),
+                  IconButton(icon: const Icon(Icons.search, color: AppColors.textPrimary), onPressed: () {}),
                 ],
               ),
 
-              // 1. 本周主推
               if (games.isNotEmpty)
                 SliverToBoxAdapter(child: _buildFeaturedHero(context, games.first)),
 
-              // 2. 玩法分类 (你的指定列表)
               _buildSectionHeader("玩法类型 · Genre"),
               SliverToBoxAdapter(
                 child: Container(
@@ -48,20 +47,20 @@ class GamesScreen extends ConsumerWidget {
                     scrollDirection: Axis.horizontal,
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     children: [
-                      _buildChip(context, "JRPG", Colors.pinkAccent),
-                      _buildChip(context, "ARPG", Colors.orangeAccent),
-                      _buildChip(context, "魂与类魂", Colors.redAccent),
-                      _buildChip(context, "射击游戏", Colors.blueAccent),
-                      _buildChip(context, "运动类游戏", Colors.greenAccent),
-                      _buildChip(context, "独立佳作", Colors.purpleAccent),
-                      _buildChip(context, "网游", Colors.cyanAccent),
-                      _buildChip(context, "免费游戏", Colors.amberAccent),
+                      // Chip 颜色调整，不要太浅看不清
+                      _buildChip(context, "JRPG", Colors.pink),
+                      _buildChip(context, "ARPG", Colors.orange),
+                      _buildChip(context, "魂与类魂", Colors.red),
+                      _buildChip(context, "射击游戏", Colors.blue),
+                      _buildChip(context, "运动类游戏", Colors.green),
+                      _buildChip(context, "独立佳作", Colors.purple),
+                      _buildChip(context, "网游", Colors.cyan),
+                      _buildChip(context, "免费游戏", Colors.amber),
                     ],
                   ),
                 ),
               ),
 
-              // 3. 厂商分类
               _buildSectionHeader("知名厂商 · Studio"),
               SliverToBoxAdapter(
                 child: Container(
@@ -78,14 +77,13 @@ class GamesScreen extends ConsumerWidget {
                       _buildChip(context, "卡普空", Colors.orange),
                       _buildChip(context, "科乐美", Colors.red),
                       _buildChip(context, "育碧", Colors.indigo),
-                      _buildChip(context, "Valve", Colors.black45),
+                      _buildChip(context, "Valve", Colors.black),
                       _buildChip(context, "万代", Colors.orangeAccent),
                     ],
                   ),
                 ),
               ),
 
-              // 4. 热销榜
               _buildSectionHeader("热销推荐 · Top Sellers"),
               SliverPadding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -124,7 +122,8 @@ class GamesScreen extends ConsumerWidget {
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-        child: Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
+        // 确保标题是深色
+        child: Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
       ),
     );
   }
@@ -134,9 +133,13 @@ class GamesScreen extends ConsumerWidget {
       padding: const EdgeInsets.only(right: 12),
       child: ActionChip(
         label: Text(label),
-        backgroundColor: color.withOpacity(0.2),
-        side: BorderSide(color: color.withOpacity(0.5)),
-        labelStyle: TextStyle(color: color, fontWeight: FontWeight.bold),
+        backgroundColor: Colors.white, // 白底
+        side: BorderSide(color: Colors.grey.withOpacity(0.2)), // 极淡边框
+        // 阴影
+        elevation: 1,
+        shadowColor: Colors.black.withOpacity(0.1),
+        labelStyle: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.bold), // 黑字
+        avatar: CircleAvatar(backgroundColor: color.withOpacity(0.2), radius: 6, child: Container(width: 6, height: 6, decoration: BoxDecoration(color: color, shape: BoxShape.circle))), // 带个小色点
         onPressed: () => context.push('/games/category/$label'),
       ),
     );
@@ -151,15 +154,20 @@ class GamesScreen extends ConsumerWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           image: DecorationImage(image: CachedNetworkImageProvider(game.headerImage), fit: BoxFit.cover),
+          boxShadow: [
+            BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10, offset: const Offset(0, 5)), // 柔和阴影
+          ],
         ),
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            gradient: const LinearGradient(colors: [Colors.transparent, Colors.black87], begin: Alignment.topCenter, end: Alignment.bottomCenter),
+            // Hero 文字需要深色背景衬托，所以这里保留局部渐变黑，或者改为白色 Glass
+            gradient: const LinearGradient(colors: [Colors.transparent, Colors.black54], begin: Alignment.topCenter, end: Alignment.bottomCenter),
           ),
           alignment: Alignment.bottomLeft,
           padding: const EdgeInsets.all(16),
-          child: Text(game.name, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+          // 这里必须是白字，因为背景是图片
+          child: Text(game.name, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white)),
         ),
       ),
     );

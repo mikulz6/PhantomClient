@@ -14,15 +14,14 @@ class GameDetailScreen extends StatefulWidget {
 }
 
 class _GameDetailScreenState extends State<GameDetailScreen> {
-  // 定义一组浅色荧光色板 (Cyberpunk Light)
   final List<Color> _neonColors = const [
-    Color(0xFF00FFCC), // 荧光青
-    Color(0xFFFF66CC), // 荧光粉
-    Color(0xFFCCFF00), // 荧光柠
-    Color(0xFF00FFFF), // 电光蓝
-    Color(0xFFFF9966), // 珊瑚橙
-    Color(0xFFCC99FF), // 薰衣草
-    Color(0xFF66FF99), // 薄荷绿
+    Color(0xFF00FFCC), 
+    Color(0xFFFF66CC), 
+    Color(0xFFCCFF00), 
+    Color(0xFF00FFFF), 
+    Color(0xFFFF9966), 
+    Color(0xFFCC99FF), 
+    Color(0xFF66FF99), 
   ];
 
   @override
@@ -34,11 +33,18 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
           SliverAppBar(
             expandedHeight: 300,
             pinned: true,
+            backgroundColor: AppColors.background, // 白底
+            iconTheme: const IconThemeData(color: Colors.black), // 返回按钮黑色 (如果图是浅色) -> 这里比较棘手，通常用白色带阴影
+            leading: Container(
+               margin: const EdgeInsets.all(8),
+               decoration: const BoxDecoration(color: Colors.white70, shape: BoxShape.circle),
+               child: const BackButton(color: Colors.black),
+            ),
             flexibleSpace: FlexibleSpaceBar(
               background: CachedNetworkImage(
                 imageUrl: widget.game.headerImage,
                 fit: BoxFit.cover,
-                colorBlendMode: BlendMode.darken,
+                // 不需要 darken 了，我们要清新的图
               ),
             ),
           ),
@@ -48,10 +54,9 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(widget.game.name, style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+                  Text(widget.game.name, style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
                   const SizedBox(height: 12),
                   
-                  // 彩色荧光标签
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
@@ -59,16 +64,17 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                   ),
                   
                   const SizedBox(height: 24),
-                  const Text("游戏简介", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  const Text("游戏简介", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
                   const SizedBox(height: 8),
-                  Text(widget.game.shortDescription, style: const TextStyle(color: Colors.white70, height: 1.5)),
+                  Text(widget.game.shortDescription, style: const TextStyle(color: AppColors.textSecondary, height: 1.5)), // 深灰简介
                   const SizedBox(height: 24),
-                  const Text("云端性能预测", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  const Text("云端性能预测", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
                   const SizedBox(height: 12),
                   FpsChart(performance: widget.game.performance),
                   const SizedBox(height: 8),
-                  Text("RTX 2060/3070 搭载: ${widget.game.performance.cpu2060}", style: const TextStyle(fontSize: 12, color: Colors.white38)),
-                  Text("RTX 4070S 搭载: ${widget.game.performance.cpu4070s}", style: const TextStyle(fontSize: 12, color: Colors.white38)),
+                  // CPU 信息改为深灰小字
+                  Text("RTX 2060/3070 搭载: ${widget.game.performance.cpu2060}", style: const TextStyle(fontSize: 12, color: AppColors.textTertiary)),
+                  Text("RTX 4070S 搭载: ${widget.game.performance.cpu4070s}", style: const TextStyle(fontSize: 12, color: AppColors.textTertiary)),
                   
                   const SizedBox(height: 100),
                 ],
@@ -82,29 +88,27 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
   }
 
   Widget _buildNeonTag(String text) {
-    // 固定的颜色映射，保证同一个标签颜色一致
     final color = _neonColors[text.hashCode.abs() % _neonColors.length];
     
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: color, // 浅色荧光背景
+        color: color, 
         borderRadius: BorderRadius.circular(4),
         boxShadow: [
-          // 加上一点同色系的辉光，增加赛博感
           BoxShadow(
-            color: color.withOpacity(0.6),
+            color: color.withOpacity(0.4), // 阴影改淡一点
             blurRadius: 8,
-            offset: const Offset(0, 0),
+            offset: const Offset(0, 2),
           ),
         ],
       ),
       child: Text(
         text,
         style: const TextStyle(
-          color: Colors.black, // 黑色文字，对比度极高
+          color: Colors.black, 
           fontSize: 12,
-          fontWeight: FontWeight.w900, // 极粗体，更有潮酷感
+          fontWeight: FontWeight.w900, 
           letterSpacing: 0.5,
         ),
       ),
@@ -114,21 +118,22 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
   Widget _buildBottomBar() {
     return Container(
       padding: const EdgeInsets.all(16),
-      color: AppColors.surface,
+      decoration: const BoxDecoration(
+        color: Colors.white, // 纯白底
+        border: Border(top: BorderSide(color: Color(0xFFEEEEEE))), // 极淡分割线
+      ),
       child: SafeArea(
         child: Row(
           children: [
             Expanded(
               flex: 1,
               child: OutlinedButton.icon(
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("打开个人云磁盘...")));
-                },
+                onPressed: () {},
                 icon: const Icon(Icons.save, size: 20),
                 label: const Text("个人磁盘"),
                 style: OutlinedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  side: const BorderSide(color: Colors.white24),
+                  foregroundColor: AppColors.textPrimary, // 黑字
+                  side: const BorderSide(color: Color(0xFFDDDDDD)), // 浅灰框
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
@@ -140,12 +145,11 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
               child: ElevatedButton(
                 onPressed: _showLaunchDialog,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
+                  backgroundColor: AppColors.primary, // 官方蓝
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  elevation: 4,
-                  shadowColor: AppColors.primary.withOpacity(0.5),
+                  elevation: 0, // PS App 风格通常是扁平的
                 ),
                 child: const Text("启动游戏", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               ),
@@ -159,7 +163,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
   void _showLaunchDialog() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: AppColors.surface,
+      backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
       builder: (context) {
         return Padding(
@@ -168,7 +172,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text("选择启动方式", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              const Text("选择启动方式", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black)),
               const SizedBox(height: 24),
               _buildLaunchOption(
                 icon: Icons.cloud_download,
@@ -206,9 +210,9 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.surfaceLight,
+          color: const Color(0xFFF5F5F7), // 浅灰背景
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: color.withOpacity(0.3)),
+          // 无边框，纯色块
         ),
         child: Row(
           children: [
@@ -217,13 +221,13 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black)),
                 const SizedBox(height: 4),
-                Text(subtitle, style: const TextStyle(color: Colors.white54, fontSize: 12)),
+                Text(subtitle, style: const TextStyle(color: Colors.grey, fontSize: 12)),
               ],
             ),
             const Spacer(),
-            const Icon(Icons.chevron_right, color: Colors.white24),
+            const Icon(Icons.chevron_right, color: Colors.grey),
           ],
         ),
       ),
@@ -231,11 +235,6 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
   }
 
   void _showMachineSelection({required bool isSteam}) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text("正在为您分配云机 (模式: ${isSteam ? 'Steam桌面' : '社区资源'})..."),
-        backgroundColor: AppColors.primary,
-      ),
-    );
+     // ...
   }
 }

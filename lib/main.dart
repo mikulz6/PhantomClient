@@ -15,8 +15,8 @@ class CloudGamingApp extends StatelessWidget {
     return MaterialApp.router(
       title: 'Cloud Gaming',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.darkTheme, // 强制深色主题
-      themeMode: ThemeMode.dark,
+      theme: AppTheme.lightTheme, // 切换为浅色主题
+      themeMode: ThemeMode.light, // 强制浅色
       routerConfig: appRouter,
     );
   }

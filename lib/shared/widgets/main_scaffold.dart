@@ -19,7 +19,7 @@ class _MainScaffoldState extends State<MainScaffold> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBody: true, // 允许 body 延伸到底部导航栏下方
+      extendBody: true, 
       body: widget.navigationShell,
       bottomNavigationBar: _buildGlassBottomBar(),
     );
@@ -31,7 +31,8 @@ class _MainScaffoldState extends State<MainScaffold> {
         filter: ImageFilter.blur(sigmaX: 20.0, sigmaY: 20.0),
         child: Container(
           decoration: BoxDecoration(
-            color: AppColors.background.withOpacity(0.7),
+            // 使用定义的 glassBackground (半透明白)
+            color: AppColors.glassBackground,
             border: const Border(
               top: BorderSide(color: AppColors.glassBorder, width: 0.5),
             ),
@@ -47,6 +48,9 @@ class _MainScaffoldState extends State<MainScaffold> {
             backgroundColor: Colors.transparent,
             selectedFontSize: 12,
             unselectedFontSize: 12,
+            // 确保图标颜色正确
+            selectedItemColor: AppColors.primary,
+            unselectedItemColor: AppColors.textSecondary,
             items: const [
               BottomNavigationBarItem(
                 icon: Icon(Icons.gamepad_outlined),
@@ -54,7 +58,7 @@ class _MainScaffoldState extends State<MainScaffold> {
                 label: '游戏',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.dns_outlined), // 代表服务器/主机
+                icon: Icon(Icons.dns_outlined), 
                 activeIcon: Icon(Icons.dns),
                 label: '大厅',
               ),

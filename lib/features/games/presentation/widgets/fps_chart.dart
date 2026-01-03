@@ -13,12 +13,16 @@ class FpsChart extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.surfaceLight,
+        color: Colors.white, // 白底
         borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey.withOpacity(0.1)), // 极淡边框
+        boxShadow: [
+          BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, 4)),
+        ],
       ),
       child: Column(
         children: [
-          _buildBar("RTX 2060", performance.fps2060, Colors.white54),
+          _buildBar("RTX 2060", performance.fps2060, Colors.grey),
           const SizedBox(height: 16),
           _buildBar("RTX 3070", performance.fps3070, AppColors.primary),
           const SizedBox(height: 16),
@@ -29,7 +33,6 @@ class FpsChart extends StatelessWidget {
   }
 
   Widget _buildBar(String label, int fps, Color color) {
-    // 假设 200 FPS 为进度条满格
     final double percentage = (fps / 200).clamp(0.0, 1.0);
 
     return Row(
@@ -38,7 +41,7 @@ class FpsChart extends StatelessWidget {
           width: 80,
           child: Text(
             label,
-            style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white70),
+            style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.textSecondary), // 深灰字
           ),
         ),
         Expanded(
@@ -48,7 +51,7 @@ class FpsChart extends StatelessWidget {
               Container(
                 height: 12,
                 decoration: BoxDecoration(
-                  color: Colors.black26,
+                  color: Colors.grey.withOpacity(0.1), // 浅灰槽
                   borderRadius: BorderRadius.circular(6),
                 ),
               ),
