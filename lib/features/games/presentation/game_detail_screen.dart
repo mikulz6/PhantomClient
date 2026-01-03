@@ -39,7 +39,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                 children: [
                   Text(widget.game.name, style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 12),
-                  // 彩色标签
+                  // 彩色实心小方框标签
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
@@ -53,7 +53,6 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                   const Text("云端性能预测", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 12),
                   FpsChart(performance: widget.game.performance),
-                   // 显示 CPU 信息
                   const SizedBox(height: 8),
                   Text("RTX 2060/3070 搭载: ${widget.game.performance.cpu2060}", style: const TextStyle(fontSize: 12, color: Colors.white38)),
                   Text("RTX 4070S 搭载: ${widget.game.performance.cpu4070s}", style: const TextStyle(fontSize: 12, color: Colors.white38)),
@@ -70,16 +69,31 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
   }
 
   Widget _buildColoredTag(String text) {
-    // 简单的哈希颜色生成
+    // 生成高饱和度的实心颜色
     final color = Colors.primaries[text.hashCode % Colors.primaries.length];
+    
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5), // 紧凑
       decoration: BoxDecoration(
-        color: color.withOpacity(0.2),
-        borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: color.withOpacity(0.5)),
+        color: color, // 实心背景
+        borderRadius: BorderRadius.circular(4), // 小圆角方框
+        boxShadow: [
+          BoxShadow(
+            color: color.withOpacity(0.4),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
-      child: Text(text, style: TextStyle(color: color, fontSize: 12, fontWeight: FontWeight.bold)),
+      child: Text(
+        text,
+        style: const TextStyle(
+          color: Colors.white, // 白色文字
+          fontSize: 12,
+          fontWeight: FontWeight.bold, // 粗体
+          letterSpacing: 0.5,
+        ),
+      ),
     );
   }
 
@@ -95,7 +109,6 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
               flex: 1,
               child: OutlinedButton.icon(
                 onPressed: () {
-                  // TODO: 跳转到个人存档管理
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("打开个人云磁盘...")));
                 },
                 icon: const Icon(Icons.save, size: 20),
@@ -104,6 +117,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                   foregroundColor: Colors.white,
                   side: const BorderSide(color: Colors.white24),
                   padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
               ),
             ),
@@ -117,6 +131,9 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                   backgroundColor: AppColors.primary,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  elevation: 4,
+                  shadowColor: AppColors.primary.withOpacity(0.5),
                 ),
                 child: const Text("启动游戏", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               ),
@@ -202,8 +219,6 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
   }
 
   void _showMachineSelection({required bool isSteam}) {
-    // 这里应该弹出一个类似 LobbyScreen 的精简版选择器
-    // 为了演示简单，直接 SnackBar
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text("正在为您分配云机 (模式: ${isSteam ? 'Steam桌面' : '社区资源'})..."),

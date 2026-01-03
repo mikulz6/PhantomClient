@@ -32,7 +32,7 @@ class GameCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 游戏封面 - 保持 3:4 或 9:16 比例
+          // 游戏封面
           AspectRatio(
             aspectRatio: 3 / 4,
             child: Stack(
@@ -50,7 +50,7 @@ class GameCard extends StatelessWidget {
                     child: const Icon(Icons.broken_image, color: AppColors.textSecondary),
                   ),
                 ),
-                // 渐变遮罩，为了让文字更清晰
+                // 渐变遮罩
                 Positioned(
                   bottom: 0,
                   left: 0,
@@ -84,7 +84,7 @@ class GameCard extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: 14, // 略微调小一点
                     fontWeight: FontWeight.bold,
                     color: AppColors.textPrimary,
                   ),
@@ -105,17 +105,21 @@ class GameCard extends StatelessWidget {
   }
 
   Widget _buildTag(String text) {
+    // 列表卡片用稍微暗一点的纯色，或者也用高亮色
+    final color = Colors.primaries[text.hashCode % Colors.primaries.length];
+    
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
       decoration: BoxDecoration(
-        color: AppColors.surfaceLight,
-        borderRadius: BorderRadius.circular(4),
+        color: color,
+        borderRadius: BorderRadius.circular(3),
       ),
       child: Text(
         text,
         style: const TextStyle(
-          fontSize: 10,
-          color: AppColors.textSecondary,
+          fontSize: 9,
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
         ),
       ),
     );
