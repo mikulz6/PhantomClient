@@ -11,28 +11,45 @@ HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
 }
 
+# 1. 玩法分类 (大幅拓宽)
 GENRE_MAPPING = {
     "JRPG": ["JRPG", "日系角色扮演"],
     "ARPG": ["动作角色扮演", "ARPG", "砍杀"],
+    "开放世界": ["开放世界", "Open World"],
+    "射击游戏": ["射击", "FPS", "TPS", "第一人称射击"],
+    "恐怖惊悚": ["恐怖", "惊悚", "生存恐怖", "丧尸"],
+    "肉鸽莱克": ["Roguelike", "Roguelite", "类Rogue"],
+    "策略模拟": ["策略", "模拟", "RTS", "大战略", "城市营造"],
+    "格斗竞技": ["格斗", "Fighting", "格斗游戏"],
+    "双人合作": ["合作", "在线合作", "本地合作", "分屏"],
+    "赛博朋克": ["赛博朋克", "Cyberpunk", "科幻"],
+    "二次元": ["动漫", "Anime", "二次元", "视觉小说"],
     "魂与类魂": ["类魂", "困难", "黑暗奇幻"],
-    "射击游戏": ["射击", "FPS", "TPS", "第一人称射击", "第三人称射击"],
-    "运动类游戏": ["体育", "竞速", "足球", "篮球"],
+    "运动竞速": ["体育", "竞速", "足球", "篮球", "赛车"],
     "独立佳作": ["独立", "像素", "2D"],
     "网游": ["大型多人在线", "MMORPG", "多人"],
     "免费游戏": ["免费开玩", "免费"]
 }
 
+# 2. 厂商分类 (补全大厂)
 PUBLISHER_KEYWORDS = {
     "索尼": ["PlayStation", "Sony"],
     "微软": ["Xbox", "Microsoft", "Bethesda", "Mojang"],
+    "任天堂": ["Nintendo"], # 也可以加上，虽然主要是主机
+    "Rockstar": ["Rockstar"], # R星独立
+    "CDPR": ["CD PROJEKT RED"], # 波兰蠢驴
+    "EA": ["Electronic Arts", "EA Sports"],
+    "育碧": ["Ubisoft"],
+    "动视暴雪": ["Blizzard", "Activision"],
+    "TakeTwo": ["Take-Two", "2K"],
     "SE": ["Square Enix"],
     "Sega": ["SEGA", "ATLUS"],
     "卡普空": ["CAPCOM"],
     "科乐美": ["KONAMI"],
-    "育碧": ["Ubisoft"],
-    "Valve": ["Valve"],
-    "TakeTwo": ["Take-Two", "Rockstar", "2K"],
-    "万代": ["Bandai Namco", "FromSoftware"]
+    "万代": ["Bandai Namco", "FromSoftware"],
+    "Larian": ["Larian"],
+    "米哈游": ["miHoYo", "Hoyoverse"],
+    "Valve": ["Valve"]
 }
 
 def determine_categories(tags, developers, publishers):
