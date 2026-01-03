@@ -11,9 +11,8 @@ class GameModel {
   final String priceText;
   final String releaseDate;
   
-  // 额外计算的属性
   late final GamePerformance performance;
-  final String category; // 现在直接从 JSON 读取
+  final List<String> categories; // 修改为列表
 
   GameModel({
     required this.id,
@@ -25,7 +24,7 @@ class GameModel {
     required this.tags,
     required this.priceText,
     required this.releaseDate,
-    required this.category,
+    required this.categories,
   }) {
     performance = GamePerformanceCalculator.estimate(name, tags, releaseDate);
   }
@@ -41,7 +40,7 @@ class GameModel {
       tags: (json['tags'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [],
       priceText: json['price_text'] as String? ?? "免费",
       releaseDate: json['release_date'] as String? ?? "",
-      category: json['category'] as String? ?? "其他", // 读取预计算的分类
+      categories: (json['categories'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [],
     );
   }
 }
@@ -50,26 +49,37 @@ class GamePerformance {
   final int fps2060;
   final int fps3070;
   final int fps4070s;
+  
+  // 增加 CPU 信息
+  final String cpu2060;
+  final String cpu3070;
+  final String cpu4070s;
 
-  GamePerformance(this.fps2060, this.fps3070, this.fps4070s);
+  GamePerformance({
+    required this.fps2060,
+    required this.fps3070,
+    required this.fps4070s,
+    this.cpu2060 = "AMD Ryzen 5 3600",
+    this.cpu3070 = "AMD Ryzen 5 3600",
+    this.cpu4070s = "AMD Ryzen 5 5600X",
+  });
 }
 
 class GamePerformanceCalculator {
   static GamePerformance estimate(String name, List<String> tags, String date) {
     int baseFps = 60;
+    bool isAAA = tags.contains("动作") || tags.contains("冒险") || tags.contains("RPG");
     
-    // 简单的估算逻辑
-    bool isAAA = tags.contains("动作") || tags.contains("冒险") || tags.contains("RPG") || tags.contains("竞速");
-    if (name.contains("Cyberpunk") || name.contains("Red Dead") || name.contains("Elden Ring") || name.contains("Wukong")) {
+    if (name.contains("Cyberpunk") || name.contains("Wukong")) {
        baseFps = 45; 
-    } else if (tags.contains("独立") || tags.contains("模拟") || tags.contains("2D")) {
+    } else if (tags.contains("独立") || tags.contains("2D")) {
        baseFps = 100; 
     }
 
     return GamePerformance(
-      baseFps,
-      (baseFps * 1.6).toInt(),
-      (baseFps * 2.2).toInt(),
+      fps2060: baseFps,
+      fps3070: (baseFps * 1.6).toInt(),
+      fps4070s: (baseFps * 2.2).toInt(),
     );
   }
 }
