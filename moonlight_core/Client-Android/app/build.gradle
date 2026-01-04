@@ -1,4 +1,4 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 
 // 仅在存在 google-services.json 且满足条件时应用 Google Services 插件
 def hasGoogleServicesJson = file('google-services.json').exists()
@@ -44,7 +44,7 @@ android {
                 }
             }
 
-            applicationId "com.limelight.root"
+        // applicationId "com.limelight.root" // Removed for library conversion
             dimension "root"
             buildConfigField "boolean", "ROOT_BUILD", "true"
         }
@@ -56,7 +56,7 @@ android {
                 }
             }
 
-            applicationId "com.limelight"
+        // applicationId "com.limelight" // Removed for library conversion
             dimension "root"
             buildConfigField "boolean", "ROOT_BUILD", "false"
         }

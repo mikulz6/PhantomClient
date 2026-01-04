@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/native_bridge.dart';
 import '../domain/game_model.dart';
 import 'widgets/fps_chart.dart';
 
@@ -235,6 +236,15 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
   }
 
   void _showMachineSelection({required bool isSteam}) {
-     // ...
+     // 耦合测试：调用 Native 启动串流
+     // TODO: 在真实场景中，这里应该弹窗选择机器，然后传入选中的机器 IP
+     const String demoHost = "192.168.1.2"; // 替换为你的 Sunshine 主机 IP
+     const int demoAppId = 1; 
+
+     NativeBridge.startGame(demoHost, demoAppId);
+
+     ScaffoldMessenger.of(context).showSnackBar(
+       const SnackBar(content: Text("正在调起 Moonlight 核心...")),
+     );
   }
 }
