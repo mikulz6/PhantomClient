@@ -16,6 +16,16 @@ const neonColors = [
     '#00FFCC', '#FF66CC', '#CCFF00', '#00FFFF', '#FF9966', '#CC99FF', '#66FF99'
 ];
 
+// Helper for HTML onClick (fixes Hero Banner click)
+function openGame(id) {
+    const game = gamesDB.find(g => g.id === id);
+    if (game) {
+        openModal(game);
+    } else {
+        console.error("Game not found: " + id);
+    }
+}
+
 function initGames() {
     const grid = document.getElementById('game-grid-container');
     if (!grid) return;
