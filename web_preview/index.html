@@ -54,56 +54,13 @@
                     </div>
                 </section>
 
-                <!-- 游戏列表 -->
-                <section class="section">
-                    <h3 class="section-title">热销推荐 · Top Sellers</h3>
-                    <div class="game-grid">
-                        <!-- Game Card 1 -->
-                        <div class="game-card" onclick="openGame('2')">
-                            <div class="card-img" style="background-image: url('https://cdn.akamai.steamstatic.com/steam/apps/1245620/header.jpg');"></div>
-                            <div class="card-info">
-                                <h4>Elden Ring</h4>
-                                <div class="tags">
-                                    <span>魂类</span>
-                                    <span>困难</span>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Game Card 2 -->
-                        <div class="game-card" onclick="openGame('3')">
-                            <div class="card-img" style="background-image: url('https://cdn.akamai.steamstatic.com/steam/apps/1174180/header.jpg');"></div>
-                            <div class="card-info">
-                                <h4>RDR 2</h4>
-                                <div class="tags">
-                                    <span>西部</span>
-                                    <span>剧情</span>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Game Card 3 -->
-                        <div class="game-card" onclick="openGame('4')">
-                            <div class="card-img" style="background-image: url('https://cdn.akamai.steamstatic.com/steam/apps/2357570/header.jpg');"></div>
-                            <div class="card-info">
-                                <h4>Overwatch 2</h4>
-                                <div class="tags">
-                                    <span>FPS</span>
-                                    <span>多人</span>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Game Card 4 -->
-                        <div class="game-card" onclick="openGame('5')">
-                            <div class="card-img" style="background-image: url('https://cdn.akamai.steamstatic.com/steam/apps/1086940/header.jpg');"></div>
-                            <div class="card-info">
-                                <h4>Baldur's Gate 3</h4>
-                                <div class="tags">
-                                    <span>CRPG</span>
-                                    <span>策略</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+            <!-- 游戏列表 -->
+            <section class="section">
+                <h3 class="section-title">热销推荐 · Top Sellers</h3>
+                <div id="game-grid-container" class="game-grid">
+                    <!-- JS 会在这里注入 60+ 个游戏卡片 -->
+                </div>
+            </section>
             </div>
 
             <!-- 大厅页面 (隐藏) -->

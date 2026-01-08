@@ -6,6 +6,8 @@
     --text-secondary: #6E6E73;
     --glass-bg: rgba(255, 255, 255, 0.85);
     --glass-border: rgba(0, 0, 0, 0.05);
+    --bottom-nav-height: 80px;
+    --app-bar-height: 60px;
 }
 
 * {
@@ -19,14 +21,16 @@ body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     background-color: var(--background);
     color: var(--text-primary);
-    overflow: hidden; /* Prevent body scroll, handle in #app */
+    overflow: hidden; /* 禁止 body 滚动 */
     height: 100vh;
+    width: 100vw;
 }
 
 #app {
     display: flex;
     flex-direction: column;
     height: 100%;
+    position: relative;
 }
 
 /* Glass Effect */
@@ -43,7 +47,7 @@ body {
     top: 0;
     left: 0;
     right: 0;
-    height: 60px; /* Safe area padding added via JS if needed */
+    height: var(--app-bar-height);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -67,12 +71,35 @@ body {
     cursor: pointer;
 }
 
-/* Content */
-.content-scroll {
+/* Main Content Container */
+#main-container {
     flex: 1;
-    overflow-y: auto;
-    padding-top: calc(60px + env(safe-area-inset-top));
-    padding-bottom: calc(80px + env(safe-area-inset-bottom));
+    position: relative;
+    /* 移除之前的 overflow-y: auto，交给 page-content 自己处理 */
+    overflow: hidden; 
+}
+
+/* Page Content (独立滚动容器) */
+.page-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: auto; /* 关键：每个页面自己滚动 */
+    padding-top: calc(var(--app-bar-height) + env(safe-area-inset-top));
+    padding-bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom));
+    -webkit-overflow-scrolling: touch;
+    background-color: var(--background);
+    display: none; /* 默认隐藏 */
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.page-content.active-page {
+    display: block;
+    opacity: 1;
+    z-index: 1;
 }
 
 /* Hero Card */
@@ -192,6 +219,7 @@ body {
     box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     cursor: pointer;
     transition: transform 0.2s;
+    height: 100%;
 }
 
 .game-card:active {
@@ -210,10 +238,17 @@ body {
 
 .card-info h4 {
     margin: 0 0 8px 0;
-    font-size: 16px;
+    font-size: 15px;
+    line-height: 1.2;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.card-info .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
 }
 
 .card-info .tags span {
@@ -222,22 +257,21 @@ body {
     padding: 2px 6px;
     border-radius: 4px;
     color: var(--text-secondary);
-    margin-right: 4px;
 }
 
 /* Bottom Nav */
 .bottom-nav {
-    position: fixed;
+    position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    height: 80px; /* Safe area padding handled here or via JS */
+    height: var(--bottom-nav-height);
     display: flex;
     justify-content: space-around;
     padding-bottom: env(safe-area-inset-bottom);
     border-top: 1px solid var(--glass-border);
     background: var(--glass-bg);
-    z-index: 100;
+    z-index: 1000; /* Ensure on top */
 }
 
 .nav-item {
@@ -252,31 +286,19 @@ body {
     font-size: 12px;
     gap: 4px;
     cursor: pointer;
+    transition: color 0.2s;
 }
 
 .nav-item i {
     font-size: 24px;
     margin-bottom: 2px;
+    transition: transform 0.2s;
 }
 
 .nav-item.active {
     color: var(--primary);
 }
 
-/* Page Switching */
-.page-content {
-    animation: fadeIn 0.3s ease;
-}
-
-.hidden-page {
-    display: none;
-}
-
-.active-page {
-    display: block;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+.nav-item.active i {
+    transform: scale(1.1);
 }
