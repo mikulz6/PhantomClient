@@ -73,5 +73,5 @@ dependencies {
     // 或者，我们通过隐式调用（Intent）来启动它。
     
     // 方案 A: 深度耦合 (推荐，但需要修改 Client-Android 为 Library)
-    # implementation project(path: ':moonlight_core:Client-Android:app')
+    // implementation project(path: ':moonlight_core:Client-Android:app')
 }
