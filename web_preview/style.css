@@ -1,0 +1,262 @@
+:root {
+    --primary: #0070D1;
+    --background: #F5F5F7;
+    --surface: #FFFFFF;
+    --text-primary: #000000;
+    --text-secondary: #6E6E73;
+    --glass-bg: rgba(255, 255, 255, 0.85);
+    --glass-border: rgba(0, 0, 0, 0.05);
+}
+
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--background);
+    color: var(--text-primary);
+    overflow: hidden; /* Prevent body scroll, handle in #app */
+    height: 100vh;
+}
+
+#app {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* Glass Effect */
+.glass-effect {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--glass-border);
+}
+
+/* App Bar */
+.app-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px; /* Safe area padding added via JS if needed */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    padding-top: env(safe-area-inset-top);
+    z-index: 100;
+}
+
+.logo {
+    font-weight: 900;
+    font-size: 20px;
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: var(--text-primary);
+    cursor: pointer;
+}
+
+/* Content */
+.content-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding-top: calc(60px + env(safe-area-inset-top));
+    padding-bottom: calc(80px + env(safe-area-inset-bottom));
+}
+
+/* Hero Card */
+.hero-card {
+    margin: 16px;
+    height: 200px;
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.hero-card:active {
+    transform: scale(0.98);
+}
+
+.hero-bg {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+}
+
+.hero-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    color: white;
+}
+
+.hero-overlay h2 {
+    margin: 0 0 8px 0;
+    font-size: 24px;
+}
+
+.tag {
+    font-size: 12px;
+    background: rgba(255,255,255,0.2);
+    padding: 4px 8px;
+    border-radius: 4px;
+    backdrop-filter: blur(4px);
+}
+
+/* Sections */
+.section {
+    margin-bottom: 24px;
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: 800;
+    margin: 0 16px 12px 16px;
+}
+
+/* Chips */
+.chip-scroll {
+    display: flex;
+    overflow-x: auto;
+    padding: 0 16px;
+    gap: 12px;
+    scrollbar-width: none;
+}
+
+.chip-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.chip {
+    display: flex;
+    align-items: center;
+    background: white;
+    border: 1px solid rgba(0,0,0,0.05);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text-primary);
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    cursor: pointer;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 8px;
+    opacity: 0.8;
+}
+
+.dot.green { background: #34C759; }
+.dot.grey { background: #8E8E93; }
+.dot.purple { background: #AF52DE; }
+.dot.pink { background: #FF2D55; }
+.dot.blue { background: #007AFF; }
+.dot.indigo { background: #5856D6; }
+.dot.orange { background: #FF9500; }
+.dot.red { background: #FF3B30; }
+
+/* Game Grid */
+.game-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    padding: 0 16px;
+}
+
+.game-card {
+    background: var(--surface);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.game-card:active {
+    transform: scale(0.96);
+}
+
+.card-img {
+    height: 120px;
+    background-size: cover;
+    background-position: center;
+}
+
+.card-info {
+    padding: 12px;
+}
+
+.card-info h4 {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-info .tags span {
+    font-size: 10px;
+    background: #F2F2F7;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--text-secondary);
+    margin-right: 4px;
+}
+
+/* Bottom Nav */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px; /* Safe area padding handled here or via JS */
+    display: flex;
+    justify-content: space-around;
+    padding-bottom: env(safe-area-inset-bottom);
+    border-top: 1px solid var(--glass-border);
+}
+
+.nav-item {
+    flex: 1;
+    background: none;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    font-size: 12px;
+    gap: 4px;
+    cursor: pointer;
+}
+
+.nav-item i {
+    font-size: 24px;
+    margin-bottom: 2px;
+}
+
+.nav-item.active {
+    color: var(--primary);
+}
