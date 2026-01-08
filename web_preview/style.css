@@ -261,17 +261,18 @@ body {
 
 /* Bottom Nav */
 .bottom-nav {
-    position: absolute;
+    position: fixed; /* Changed from absolute to fixed */
     bottom: 0;
     left: 0;
     right: 0;
-    height: var(--bottom-nav-height);
-    display: flex;
-    justify-content: space-around;
+    /* Use padding for safe area, let height adapt */
     padding-bottom: env(safe-area-inset-bottom);
     border-top: 1px solid var(--glass-border);
     background: var(--glass-bg);
-    z-index: 1000; /* Ensure on top */
+    z-index: 1000;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }
 
 .nav-item {
@@ -287,6 +288,7 @@ body {
     gap: 4px;
     cursor: pointer;
     transition: color 0.2s;
+    height: 80px; /* Define clickable area height explicitly */
 }
 
 .nav-item i {
