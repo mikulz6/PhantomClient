@@ -5,23 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>CloudGaming</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=3">
+    <link rel="stylesheet" href="style.css?v=4">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div id="app">
-        <!-- 顶部导航 -->
-        <header class="app-bar glass-effect">
-            <h1 class="logo">CloudGaming <span style="font-size: 10px; color: #0070D1; background: rgba(0,112,209,0.1); padding: 2px 6px; border-radius: 4px; vertical-align: middle;">v2.1</span></h1>
+        <!-- 顶部导航 (仅在 Games Tab 显示) -->
+        <header id="main-app-bar" class="app-bar glass-effect">
+            <h1 class="logo">CloudGaming <span style="font-size: 10px; color: #0070D1; background: rgba(0,112,209,0.1); padding: 2px 6px; border-radius: 4px; vertical-align: middle;">v2.2</span></h1>
             <button class="icon-btn"><i class="fas fa-search"></i></button>
         </header>
 
         <!-- 主内容区域 -->
         <main id="main-container" class="content-scroll">
-            <!-- 游戏页面 (默认显示) -->
+            
+            <!-- 1. 游戏页面 -->
             <div id="page-games" class="page-content active-page">
                 <!-- Hero Banner -->
-                <div class="hero-card" onclick="openGame('1')">
+                <div class="hero-card" onclick="openGame('4')">
                     <div class="hero-bg" style="background-image: url('https://cdn.akamai.steamstatic.com/steam/apps/1091500/header.jpg');"></div>
                     <div class="hero-overlay">
                         <h2>Cyberpunk 2077</h2>
@@ -38,89 +39,160 @@
                         <button class="chip"><span class="dot purple"></span>肉鸽莱克</button>
                         <button class="chip"><span class="dot pink"></span>双人合作</button>
                         <button class="chip"><span class="dot blue"></span>射击游戏</button>
-                        <button class="chip"><span class="dot indigo"></span>JRPG</button>
                     </div>
                 </section>
 
-                <!-- 厂商标签 -->
+                <!-- 游戏列表容器 -->
                 <section class="section">
-                    <h3 class="section-title">信仰厂牌 · Studio</h3>
-                    <div class="chip-scroll">
-                        <button class="chip"><span class="dot orange"></span>Rockstar</button>
-                        <button class="chip"><span class="dot red"></span>CDPR</button>
-                        <button class="chip"><span class="dot blue"></span>Sony</button>
-                        <button class="chip"><span class="dot red"></span>Nintendo</button>
-                        <button class="chip"><span class="dot green"></span>Xbox</button>
+                    <h3 class="section-title">热销推荐 · Top Sellers</h3>
+                    <div id="game-grid-container" class="game-grid">
+                        <!-- JS 注入 -->
                     </div>
                 </section>
-
-            <!-- 游戏列表 -->
-            <section class="section">
-                <h3 class="section-title">热销推荐 · Top Sellers</h3>
-                <div id="game-grid-container" class="game-grid">
-                    <!-- JS 会在这里注入 60+ 个游戏卡片 -->
-                </div>
-            </section>
             </div>
 
-            <!-- 大厅页面 (隐藏) -->
+            <!-- 2. 大厅页面 (重构版) -->
             <div id="page-lobby" class="page-content hidden-page">
-                <section class="section">
-                    <h3 class="section-title">可用机器 · Available Rigs</h3>
-                    <div class="machine-list" style="padding: 0 16px;">
-                        <div class="machine-card" style="background: white; border-radius: 16px; padding: 16px; margin-bottom: 12px; display: flex; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                            <div class="status-indicator" style="width: 12px; height: 12px; background: #34C759; border-radius: 50%; margin-right: 16px;"></div>
-                            <div class="machine-info" style="flex: 1;">
-                                <h4 style="margin: 0 0 4px 0;">RTX 4090 - Ultra</h4>
-                                <span style="font-size: 12px; color: #6E6E73;">Idle · 4ms Latency</span>
-                            </div>
-                            <button style="background: #0070D1; color: white; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 600;">连接</button>
-                        </div>
-                        <div class="machine-card" style="background: white; border-radius: 16px; padding: 16px; margin-bottom: 12px; display: flex; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); opacity: 0.6;">
-                            <div class="status-indicator" style="width: 12px; height: 12px; background: #FF9500; border-radius: 50%; margin-right: 16px;"></div>
-                            <div class="machine-info" style="flex: 1;">
-                                <h4 style="margin: 0 0 4px 0;">RTX 3080 - Pro</h4>
-                                <span style="font-size: 12px; color: #6E6E73;">Busy · User: Mikulz</span>
-                            </div>
-                            <button disabled style="background: #E5E5EA; color: #8E8E93; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 600;">占用</button>
-                        </div>
-                    </div>
-                </section>
-            </div>
-
-            <!-- 我的页面 (隐藏) -->
-            <div id="page-profile" class="page-content hidden-page">
-                <div class="profile-header" style="padding: 24px 16px; display: flex; align-items: center;">
-                    <div class="avatar" style="width: 64px; height: 64px; background: #E5E5EA; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #8E8E93; margin-right: 16px;">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <div>
-                        <h2 style="margin: 0 0 4px 0; font-size: 20px;">Guest User</h2>
-                        <span style="font-size: 14px; color: #6E6E73;">ID: 88489527</span>
-                    </div>
+                <div style="padding: 24px 16px 8px 16px;">
+                    <h2 style="font-size: 28px; margin: 0 0 8px 0;">选择您的配置</h2>
+                    <p style="color: var(--text-secondary); margin: 0;">高性能云端显卡 · 即刻交付</p>
                 </div>
                 
                 <section class="section">
-                    <h3 class="section-title">设置 · Settings</h3>
-                    <div class="settings-list" style="padding: 0 16px;">
-                        <div class="setting-item" style="background: white; border-radius: 12px; padding: 16px; margin-bottom: 1px; display: flex; justify-content: space-between; align-items: center;">
-                            <span>通用设置</span>
-                            <i class="fas fa-chevron-right" style="color: #C7C7CC; font-size: 14px;"></i>
+                    <!-- Machine 1 -->
+                    <div class="machine-card" onclick="alert('正在分配 RTX 4090 实例...')">
+                        <div class="machine-bg" style="background-image: url('https://assets.nvidia.partners/images/png/geforce-rtx-4090-back.png');"></div>
+                        <div class="machine-overlay"></div>
+                        <div class="machine-content">
+                            <h4 class="machine-name">RTX 4090</h4>
+                            <div class="machine-desc">Ultra Performance</div>
+                            <div class="machine-price">
+                                <span class="price-val">120</span>
+                                <span class="price-unit">金币/时</span>
+                            </div>
+                            <div class="machine-status">
+                                <i class="fas fa-check-circle" style="color: #34C759;"></i>
+                                <span>剩余: 4</span>
+                            </div>
                         </div>
-                        <div class="setting-item" style="background: white; border-radius: 12px; padding: 16px; margin-bottom: 1px; display: flex; justify-content: space-between; align-items: center;">
-                            <span>串流画质</span>
-                            <span style="font-size: 14px; color: #6E6E73;">1080P 60FPS</span>
+                    </div>
+
+                    <!-- Machine 2 -->
+                    <div class="machine-card" onclick="alert('正在分配 RTX 3080 实例...')">
+                        <div class="machine-bg" style="background-image: url('https://www.nvidia.com/content/dam/en-zz/Solutions/geforce/ampere/rtx-3080/geforce-rtx-3080-shop-630-d@2x.png');"></div>
+                        <div class="machine-overlay"></div>
+                        <div class="machine-content">
+                            <h4 class="machine-name">RTX 3080</h4>
+                            <div class="machine-desc">Pro Gaming</div>
+                            <div class="machine-price">
+                                <span class="price-val">80</span>
+                                <span class="price-unit">金币/时</span>
+                            </div>
+                            <div class="machine-status" style="background: rgba(0,0,0,0.6);">
+                                <i class="fas fa-check-circle" style="color: #34C759;"></i>
+                                <span>剩余: 12</span>
+                            </div>
                         </div>
-                        <div class="setting-item" style="background: white; border-radius: 12px; padding: 16px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
-                            <span>关于</span>
-                            <i class="fas fa-chevron-right" style="color: #C7C7CC; font-size: 14px;"></i>
+                    </div>
+
+                    <!-- Machine 3 (Busy) -->
+                    <div class="machine-card" style="opacity: 0.7;">
+                        <div class="machine-bg" style="background-image: url('https://www.nvidia.com/content/dam/en-zz/Solutions/geforce/geforce-rtx-2060/geforce-rtx-2060-shop-a-625-2x.png');"></div>
+                        <div class="machine-overlay"></div>
+                        <div class="machine-content">
+                            <h4 class="machine-name">RTX 2060</h4>
+                            <div class="machine-desc" style="background: #EEE; color: #666;">Entry Level</div>
+                            <div class="machine-price">
+                                <span class="price-val" style="color: #666;">40</span>
+                                <span class="price-unit">金币/时</span>
+                            </div>
+                            <div class="machine-status" style="background: #FF3B30;">
+                                <i class="fas fa-times-circle"></i>
+                                <span>暂无库存</span>
+                            </div>
                         </div>
                     </div>
                 </section>
             </div>
 
-            <div style="height: 100px;"></div>
+            <!-- 3. 我的页面 (重构版) -->
+            <div id="page-profile" class="page-content hidden-page">
+                <div class="profile-header-card">
+                    <div class="user-info">
+                        <div class="avatar"><i class="fas fa-user"></i></div>
+                        <div class="user-text">
+                            <div class="user-name">Guest User</div>
+                            <div class="user-id">ID: 88489527</div>
+                        </div>
+                        <div style="flex: 1;"></div>
+                        <button class="icon-btn"><i class="fas fa-cog"></i></button>
+                    </div>
+                    
+                    <div class="gold-card">
+                        <div>
+                            <div class="gold-label">当前金币</div>
+                            <div class="gold-amount">12,500</div>
+                        </div>
+                        <button class="recharge-btn">充值</button>
+                    </div>
+                </div>
+
+                <div class="action-grid">
+                    <div class="action-card">
+                        <div class="action-icon" style="background: rgba(255,149,0,0.1);"><i class="fas fa-calendar-check" style="color: #FF9500;"></i></div>
+                        <div class="action-title">每日签到</div>
+                        <div class="action-sub">送 400 金币</div>
+                    </div>
+                    <div class="action-card">
+                        <div class="action-icon" style="background: rgba(52,199,89,0.1);"><i class="fas fa-tasks" style="color: #34C759;"></i></div>
+                        <div class="action-title">我的任务</div>
+                        <div class="action-sub">完成领奖励</div>
+                    </div>
+                </div>
+
+                <div class="menu-list">
+                    <div class="menu-item">
+                        <span><i class="fas fa-history" style="color: #8E8E93; margin-right: 12px; width: 20px;"></i> 游玩记录</span>
+                        <i class="fas fa-chevron-right" style="color: #C7C7CC; font-size: 14px;"></i>
+                    </div>
+                    <div class="menu-item">
+                        <span><i class="fas fa-save" style="color: #8E8E93; margin-right: 12px; width: 20px;"></i> 云端存档</span>
+                        <i class="fas fa-chevron-right" style="color: #C7C7CC; font-size: 14px;"></i>
+                    </div>
+                    <div class="menu-item">
+                        <span><i class="fas fa-headset" style="color: #8E8E93; margin-right: 12px; width: 20px;"></i> 帮助与反馈</span>
+                        <i class="fas fa-chevron-right" style="color: #C7C7CC; font-size: 14px;"></i>
+                    </div>
+                </div>
+            </div>
         </main>
+
+        <!-- 详情页弹窗 (隐藏) -->
+        <div id="game-detail-modal" class="modal-overlay">
+            <div class="modal-header">
+                <div id="modal-img" class="modal-img"></div>
+                <div class="modal-back-btn" onclick="closeModal()">
+                    <i class="fas fa-arrow-left"></i>
+                </div>
+            </div>
+            <div class="modal-content">
+                <h2 id="modal-title" class="modal-title">Game Title</h2>
+                <div id="modal-tags" class="neon-tags">
+                    <!-- Tags -->
+                </div>
+                <p class="modal-desc">
+                    体验次世代的沉浸式剧情，探索无缝连接的开放世界。通过 Phantom Cloud 独家优化，在手机上也能享受光线追踪带来的极致视觉盛宴。支持 4K 60FPS 串流，超低延迟。
+                </p>
+                <h3 style="font-size: 18px; margin-bottom: 12px;">云端性能预测</h3>
+                <div class="chart-placeholder">
+                    <i class="fas fa-chart-line" style="margin-right: 8px;"></i> 此处显示实时 FPS 性能图表
+                </div>
+            </div>
+            <div class="modal-bottom-bar">
+                <button class="btn-secondary"><i class="fas fa-save"></i> 存档</button>
+                <button class="btn-primary" onclick="alert('正在启动云端实例...')">启动游戏</button>
+            </div>
+        </div>
 
         <!-- 底部导航 -->
         <nav class="bottom-nav glass-effect">
@@ -138,6 +210,6 @@
             </button>
         </nav>
     </div>
-    <script src="script.js?v=3"></script>
+    <script src="script.js?v=4"></script>
 </body>
 </html>

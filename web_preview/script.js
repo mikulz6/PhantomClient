@@ -10,34 +10,26 @@ const gamesDB = [
     { id: '8', name: "Sekiro", img: "https://cdn.akamai.steamstatic.com/steam/apps/814380/header.jpg", tags: ["动作", "高难"] },
     { id: '9', name: "Hogwarts Legacy", img: "https://cdn.akamai.steamstatic.com/steam/apps/990080/header.jpg", tags: ["魔法", "开放世界"] },
     { id: '10', name: "Spider-Man", img: "https://cdn.akamai.steamstatic.com/steam/apps/1817070/header.jpg", tags: ["超级英雄", "动作"] },
-    { id: '11', name: "Resident Evil 4", img: "https://cdn.akamai.steamstatic.com/steam/apps/2050650/header.jpg", tags: ["恐怖", "射击"] },
-    { id: '12', name: "Monster Hunter World", img: "https://cdn.akamai.steamstatic.com/steam/apps/582010/header.jpg", tags: ["共斗", "动作"] },
-    { id: '13', name: "Forza Horizon 5", img: "https://cdn.akamai.steamstatic.com/steam/apps/1551360/header.jpg", tags: ["赛车", "模拟"] },
-    { id: '14', name: "Assassin's Creed Valhalla", img: "https://cdn.akamai.steamstatic.com/steam/apps/2208920/header.jpg", tags: ["历史", "RPG"] },
-    { id: '15', name: "Final Fantasy VII", img: "https://cdn.akamai.steamstatic.com/steam/apps/1462040/header.jpg", tags: ["JRPG", "经典"] },
-    { id: '16', name: "Persona 5 Royal", img: "https://cdn.akamai.steamstatic.com/steam/apps/1687950/header.jpg", tags: ["JRPG", "回合制"] },
-    { id: '17', name: "Apex Legends", img: "https://cdn.akamai.steamstatic.com/steam/apps/1172470/header.jpg", tags: ["FPS", "大逃杀"] },
-    { id: '18', name: "Destiny 2", img: "https://cdn.akamai.steamstatic.com/steam/apps/1085660/header.jpg", tags: ["FPS", "MMO"] },
-    { id: '19', name: "Dota 2", img: "https://cdn.akamai.steamstatic.com/steam/apps/570/header.jpg", tags: ["MOBA", "竞技"] },
-    { id: '20', name: "Counter-Strike 2", img: "https://cdn.akamai.steamstatic.com/steam/apps/730/header.jpg", tags: ["FPS", "竞技"] },
+];
+
+const neonColors = [
+    '#00FFCC', '#FF66CC', '#CCFF00', '#00FFFF', '#FF9966', '#CC99FF', '#66FF99'
 ];
 
 function initGames() {
     const grid = document.getElementById('game-grid-container');
     if (!grid) return;
 
-    // 清空现有内容
     grid.innerHTML = '';
+    
+    // 生成足够多的卡片
+    const allGames = [...gamesDB, ...gamesDB, ...gamesDB]; 
 
-    // 生成大量卡片 (重复几次数组以模拟很多游戏)
-    const allGames = [...gamesDB, ...gamesDB, ...gamesDB]; // 60个游戏
-
-    allGames.forEach((game, index) => {
+    allGames.forEach((game) => {
         const card = document.createElement('div');
         card.className = 'game-card';
-        card.onclick = () => openGame(game.id);
+        card.onclick = () => openModal(game);
         
-        // 延迟加载图片机制（简单模拟）
         const tagsHtml = game.tags.map(tag => `<span>${tag}</span>`).join('');
         
         card.innerHTML = `
@@ -49,16 +41,36 @@ function initGames() {
         `;
         grid.appendChild(card);
     });
+    console.log("Games initialized: " + allGames.length);
 }
 
-function openGame(id) {
-    console.log("Open game: " + id);
-    // 简单的点击反馈动画
-    const card = event.currentTarget;
-    card.style.transform = "scale(0.95)";
-    setTimeout(() => {
-        card.style.transform = "scale(1)";
-    }, 150);
+// 详情页模态框逻辑
+function openModal(game) {
+    // 填充数据
+    document.getElementById('modal-img').style.backgroundImage = `url('${game.img}')`;
+    document.getElementById('modal-title').innerText = game.name;
+    
+    const tagsContainer = document.getElementById('modal-tags');
+    tagsContainer.innerHTML = '';
+    game.tags.forEach(tag => {
+        const tagEl = document.createElement('div');
+        tagEl.className = 'neon-tag';
+        tagEl.innerText = tag;
+        // 随机霓虹色
+        const color = neonColors[Math.floor(Math.random() * neonColors.length)];
+        tagEl.style.backgroundColor = color;
+        tagEl.style.boxShadow = `0 2px 8px ${color}66`; // 40% opacity hex
+        tagsContainer.appendChild(tagEl);
+    });
+
+    // 显示模态框
+    const modal = document.getElementById('game-detail-modal');
+    modal.classList.add('open');
+}
+
+function closeModal() {
+    const modal = document.getElementById('game-detail-modal');
+    modal.classList.remove('open');
 }
 
 // 页面加载初始化
@@ -68,22 +80,30 @@ document.addEventListener('DOMContentLoaded', () => {
     // Tab 切换逻辑
     document.querySelectorAll('.nav-item').forEach((item, index) => {
         item.addEventListener('click', function() {
-            // 1. Update Tab State
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             this.classList.add('active');
 
-            // 2. Switch Page Content
             const pages = ['page-games', 'page-lobby', 'page-profile'];
             const targetPageId = pages[index];
 
+            // 切换页面显隐
             document.querySelectorAll('.page-content').forEach(page => {
                 if (page.id === targetPageId) {
                     page.classList.add('active-page');
-                    // 注意：不需要处理 hidden-page 类，因为 css 中非 active-page 默认就是 display: none
+                    page.classList.remove('hidden-page');
                 } else {
                     page.classList.remove('active-page');
+                    page.classList.add('hidden-page');
                 }
             });
+
+            // 切换顶部 App Bar 显隐 (个人中心和大厅通常有自己的头图)
+            const appBar = document.getElementById('main-app-bar');
+            if (targetPageId === 'page-games') {
+                appBar.style.display = 'flex';
+            } else {
+                appBar.style.display = 'none'; // 大厅和个人中心全屏
+            }
         });
     });
 });
