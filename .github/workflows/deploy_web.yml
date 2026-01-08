@@ -29,8 +29,11 @@ jobs:
       - name: Install Dependencies
         run: flutter pub get
 
+      - name: Flutter Doctor
+        run: flutter doctor -v
+
       - name: Build Web
-        run: flutter build web --release --verbose
+        run: flutter build web --release --web-renderer html --verbose
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
