@@ -27,13 +27,12 @@ jobs:
           channel: 'stable'
       
       - name: Install Dependencies
-        run: flutter pub get
-
-      - name: Flutter Doctor
-        run: flutter doctor -v
+        run: |
+          flutter pub get
+          flutter pub upgrade
 
       - name: Build Web
-        run: flutter build web --release --web-renderer html --verbose
+        run: flutter build web --release --verbose
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
