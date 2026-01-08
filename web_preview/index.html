@@ -17,91 +17,150 @@
         </header>
 
         <!-- 主内容区域 -->
-        <main class="content-scroll">
-            <!-- Hero Banner -->
-            <div class="hero-card" onclick="openGame('1')">
-                <div class="hero-bg" style="background-image: url('https://cdn.akamai.steamstatic.com/steam/apps/1091500/header.jpg');"></div>
-                <div class="hero-overlay">
-                    <h2>Cyberpunk 2077</h2>
-                    <span class="tag">开放世界</span>
+        <main id="main-container" class="content-scroll">
+            <!-- 游戏页面 (默认显示) -->
+            <div id="page-games" class="page-content active-page">
+                <!-- Hero Banner -->
+                <div class="hero-card" onclick="openGame('1')">
+                    <div class="hero-bg" style="background-image: url('https://cdn.akamai.steamstatic.com/steam/apps/1091500/header.jpg');"></div>
+                    <div class="hero-overlay">
+                        <h2>Cyberpunk 2077</h2>
+                        <span class="tag">开放世界</span>
+                    </div>
                 </div>
+
+                <!-- 分类标签 -->
+                <section class="section">
+                    <h3 class="section-title">热门品类 · Genre</h3>
+                    <div class="chip-scroll">
+                        <button class="chip"><span class="dot green"></span>开放世界</button>
+                        <button class="chip"><span class="dot grey"></span>恐怖惊悚</button>
+                        <button class="chip"><span class="dot purple"></span>肉鸽莱克</button>
+                        <button class="chip"><span class="dot pink"></span>双人合作</button>
+                        <button class="chip"><span class="dot blue"></span>射击游戏</button>
+                        <button class="chip"><span class="dot indigo"></span>JRPG</button>
+                    </div>
+                </section>
+
+                <!-- 厂商标签 -->
+                <section class="section">
+                    <h3 class="section-title">信仰厂牌 · Studio</h3>
+                    <div class="chip-scroll">
+                        <button class="chip"><span class="dot orange"></span>Rockstar</button>
+                        <button class="chip"><span class="dot red"></span>CDPR</button>
+                        <button class="chip"><span class="dot blue"></span>Sony</button>
+                        <button class="chip"><span class="dot red"></span>Nintendo</button>
+                        <button class="chip"><span class="dot green"></span>Xbox</button>
+                    </div>
+                </section>
+
+                <!-- 游戏列表 -->
+                <section class="section">
+                    <h3 class="section-title">热销推荐 · Top Sellers</h3>
+                    <div class="game-grid">
+                        <!-- Game Card 1 -->
+                        <div class="game-card" onclick="openGame('2')">
+                            <div class="card-img" style="background-image: url('https://cdn.akamai.steamstatic.com/steam/apps/1245620/header.jpg');"></div>
+                            <div class="card-info">
+                                <h4>Elden Ring</h4>
+                                <div class="tags">
+                                    <span>魂类</span>
+                                    <span>困难</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Game Card 2 -->
+                        <div class="game-card" onclick="openGame('3')">
+                            <div class="card-img" style="background-image: url('https://cdn.akamai.steamstatic.com/steam/apps/1174180/header.jpg');"></div>
+                            <div class="card-info">
+                                <h4>RDR 2</h4>
+                                <div class="tags">
+                                    <span>西部</span>
+                                    <span>剧情</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Game Card 3 -->
+                        <div class="game-card" onclick="openGame('4')">
+                            <div class="card-img" style="background-image: url('https://cdn.akamai.steamstatic.com/steam/apps/2357570/header.jpg');"></div>
+                            <div class="card-info">
+                                <h4>Overwatch 2</h4>
+                                <div class="tags">
+                                    <span>FPS</span>
+                                    <span>多人</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Game Card 4 -->
+                        <div class="game-card" onclick="openGame('5')">
+                            <div class="card-img" style="background-image: url('https://cdn.akamai.steamstatic.com/steam/apps/1086940/header.jpg');"></div>
+                            <div class="card-info">
+                                <h4>Baldur's Gate 3</h4>
+                                <div class="tags">
+                                    <span>CRPG</span>
+                                    <span>策略</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
             </div>
 
-            <!-- 分类标签 -->
-            <section class="section">
-                <h3 class="section-title">热门品类 · Genre</h3>
-                <div class="chip-scroll">
-                    <button class="chip"><span class="dot green"></span>开放世界</button>
-                    <button class="chip"><span class="dot grey"></span>恐怖惊悚</button>
-                    <button class="chip"><span class="dot purple"></span>肉鸽莱克</button>
-                    <button class="chip"><span class="dot pink"></span>双人合作</button>
-                    <button class="chip"><span class="dot blue"></span>射击游戏</button>
-                    <button class="chip"><span class="dot indigo"></span>JRPG</button>
-                </div>
-            </section>
+            <!-- 大厅页面 (隐藏) -->
+            <div id="page-lobby" class="page-content hidden-page">
+                <section class="section">
+                    <h3 class="section-title">可用机器 · Available Rigs</h3>
+                    <div class="machine-list" style="padding: 0 16px;">
+                        <div class="machine-card" style="background: white; border-radius: 16px; padding: 16px; margin-bottom: 12px; display: flex; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                            <div class="status-indicator" style="width: 12px; height: 12px; background: #34C759; border-radius: 50%; margin-right: 16px;"></div>
+                            <div class="machine-info" style="flex: 1;">
+                                <h4 style="margin: 0 0 4px 0;">RTX 4090 - Ultra</h4>
+                                <span style="font-size: 12px; color: #6E6E73;">Idle · 4ms Latency</span>
+                            </div>
+                            <button style="background: #0070D1; color: white; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 600;">连接</button>
+                        </div>
+                        <div class="machine-card" style="background: white; border-radius: 16px; padding: 16px; margin-bottom: 12px; display: flex; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); opacity: 0.6;">
+                            <div class="status-indicator" style="width: 12px; height: 12px; background: #FF9500; border-radius: 50%; margin-right: 16px;"></div>
+                            <div class="machine-info" style="flex: 1;">
+                                <h4 style="margin: 0 0 4px 0;">RTX 3080 - Pro</h4>
+                                <span style="font-size: 12px; color: #6E6E73;">Busy · User: Mikulz</span>
+                            </div>
+                            <button disabled style="background: #E5E5EA; color: #8E8E93; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 600;">占用</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
 
-            <!-- 厂商标签 -->
-            <section class="section">
-                <h3 class="section-title">信仰厂牌 · Studio</h3>
-                <div class="chip-scroll">
-                    <button class="chip"><span class="dot orange"></span>Rockstar</button>
-                    <button class="chip"><span class="dot red"></span>CDPR</button>
-                    <button class="chip"><span class="dot blue"></span>Sony</button>
-                    <button class="chip"><span class="dot red"></span>Nintendo</button>
-                    <button class="chip"><span class="dot green"></span>Xbox</button>
-                </div>
-            </section>
-
-            <!-- 游戏列表 -->
-            <section class="section">
-                <h3 class="section-title">热销推荐 · Top Sellers</h3>
-                <div class="game-grid">
-                    <!-- Game Card 1 -->
-                    <div class="game-card" onclick="openGame('2')">
-                        <div class="card-img" style="background-image: url('https://cdn.akamai.steamstatic.com/steam/apps/1245620/header.jpg');"></div>
-                        <div class="card-info">
-                            <h4>Elden Ring</h4>
-                            <div class="tags">
-                                <span>魂类</span>
-                                <span>困难</span>
-                            </div>
-                        </div>
+            <!-- 我的页面 (隐藏) -->
+            <div id="page-profile" class="page-content hidden-page">
+                <div class="profile-header" style="padding: 24px 16px; display: flex; align-items: center;">
+                    <div class="avatar" style="width: 64px; height: 64px; background: #E5E5EA; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #8E8E93; margin-right: 16px;">
+                        <i class="fas fa-user"></i>
                     </div>
-                    <!-- Game Card 2 -->
-                    <div class="game-card" onclick="openGame('3')">
-                        <div class="card-img" style="background-image: url('https://cdn.akamai.steamstatic.com/steam/apps/1174180/header.jpg');"></div>
-                        <div class="card-info">
-                            <h4>RDR 2</h4>
-                            <div class="tags">
-                                <span>西部</span>
-                                <span>剧情</span>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Game Card 3 -->
-                    <div class="game-card" onclick="openGame('4')">
-                        <div class="card-img" style="background-image: url('https://cdn.akamai.steamstatic.com/steam/apps/2357570/header.jpg');"></div>
-                        <div class="card-info">
-                            <h4>Overwatch 2</h4>
-                            <div class="tags">
-                                <span>FPS</span>
-                                <span>多人</span>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Game Card 4 -->
-                    <div class="game-card" onclick="openGame('5')">
-                        <div class="card-img" style="background-image: url('https://cdn.akamai.steamstatic.com/steam/apps/1086940/header.jpg');"></div>
-                        <div class="card-info">
-                            <h4>Baldur's Gate 3</h4>
-                            <div class="tags">
-                                <span>CRPG</span>
-                                <span>策略</span>
-                            </div>
-                        </div>
+                    <div>
+                        <h2 style="margin: 0 0 4px 0; font-size: 20px;">Guest User</h2>
+                        <span style="font-size: 14px; color: #6E6E73;">ID: 88489527</span>
                     </div>
                 </div>
-            </section>
+                
+                <section class="section">
+                    <h3 class="section-title">设置 · Settings</h3>
+                    <div class="settings-list" style="padding: 0 16px;">
+                        <div class="setting-item" style="background: white; border-radius: 12px; padding: 16px; margin-bottom: 1px; display: flex; justify-content: space-between; align-items: center;">
+                            <span>通用设置</span>
+                            <i class="fas fa-chevron-right" style="color: #C7C7CC; font-size: 14px;"></i>
+                        </div>
+                        <div class="setting-item" style="background: white; border-radius: 12px; padding: 16px; margin-bottom: 1px; display: flex; justify-content: space-between; align-items: center;">
+                            <span>串流画质</span>
+                            <span style="font-size: 14px; color: #6E6E73;">1080P 60FPS</span>
+                        </div>
+                        <div class="setting-item" style="background: white; border-radius: 12px; padding: 16px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
+                            <span>关于</span>
+                            <i class="fas fa-chevron-right" style="color: #C7C7CC; font-size: 14px;"></i>
+                        </div>
+                    </div>
+                </section>
+            </div>
 
             <div style="height: 100px;"></div>
         </main>

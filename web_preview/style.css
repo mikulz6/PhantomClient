@@ -236,6 +236,8 @@ body {
     justify-content: space-around;
     padding-bottom: env(safe-area-inset-bottom);
     border-top: 1px solid var(--glass-border);
+    background: var(--glass-bg);
+    z-index: 100;
 }
 
 .nav-item {
@@ -259,4 +261,22 @@ body {
 
 .nav-item.active {
     color: var(--primary);
+}
+
+/* Page Switching */
+.page-content {
+    animation: fadeIn 0.3s ease;
+}
+
+.hidden-page {
+    display: none;
+}
+
+.active-page {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
