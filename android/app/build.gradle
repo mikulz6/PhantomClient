@@ -66,12 +66,12 @@ flutter {
 
 dependencies {
     // === 核心耦合：依赖 Moonlight Core ===
-    // 注意：这里需要确保 Client-Android 已被配置为 Library，或者我们使用 implementation project 强制引用
+    // 注意：这里需要确保 Client-Android 已被配置为 Library，或者我们使用 # implementation project 强制引用
     // 由于 Client-Android 原本是 Application，这里可能会有 manifest 合并冲突，
     // 最好的办法是让 Client-Android 变成 Library。
     // 但为了不破坏原有结构，我们暂时以 implementation 方式引入它的类路径（如果它是 Lib）
     // 或者，我们通过隐式调用（Intent）来启动它。
     
     // 方案 A: 深度耦合 (推荐，但需要修改 Client-Android 为 Library)
-    implementation project(path: ':moonlight_core:Client-Android:app')
+    # implementation project(path: ':moonlight_core:Client-Android:app')
 }
