@@ -32,7 +32,7 @@ jobs:
           flutter pub upgrade
 
       - name: Build Web
-        run: flutter build web --release --verbose --no-tree-shake-icons
+        run: flutter build web --release --verbose --no-tree-shake-icons --web-renderer canvaskit
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
