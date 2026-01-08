@@ -30,8 +30,7 @@ jobs:
         run: flutter pub get
 
       - name: Build Web
-        # 这里的 --base-href 是为了适配 GitHub Pages 的子路径
-        run: flutter build web --release --base-href "/PhantomClient/" --web-renderer html
+        run: flutter build web --release --base-href "/PhantomClient/" --verbose
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
