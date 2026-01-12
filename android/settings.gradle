@@ -30,5 +30,6 @@ plugins {
 include ":app"
 
 // === 核心耦合：引入 Moonlight Core ===
-// include ':moonlight_core:Client-Android:app'
-// project(':moonlight_core:Client-Android:app').projectDir = new File(settingsDir, '../moonlight_core/Client-Android/app')
+include ':moonlight_core:Client-Android:app'
+// 映射到正确的物理路径 (origin_sdk 下)
+project(':moonlight_core:Client-Android:app').projectDir = new File(settingsDir, '../origin_sdk/moonlight_core/Client-Android/app')
