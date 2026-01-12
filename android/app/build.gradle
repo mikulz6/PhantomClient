@@ -24,9 +24,6 @@ if (flutterVersionName == null) {
 
 android {
     compileSdkVersion 34
-    // namespace attribute is required for AGP 8.0+
-    namespace "com.mikulz.phantom"
-    ndkVersion flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
@@ -46,7 +43,7 @@ android {
         applicationId "com.mikulz.phantom"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion 22 // 匹配 Moonlight VPlus 的要求
+        minSdkVersion 23 // 升级到 23 以支持更好的 AndroidX 兼容性
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
